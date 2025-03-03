@@ -9,18 +9,24 @@ data class UserModel(
     val password: String,
     val email: String,
     val phoneNumber: String,
-    val activated: Boolean,
     val createdAt: Long
-)
+) {
+    fun toShortModel() = UserResponseModel(
+        id = id,
+        username = username,
+        email = email,
+        phoneNumber = phoneNumber,
+        createdAt = createdAt
+    )
+}
 
 @Serializable
 data class UserResponseModel(
     val id: Int,
     val username: String,
     val email: String,
-    val activationUUID: String?,
     val phoneNumber: String?,
-    val activated: Boolean,
+    val createdAt: Long
 )
 
 @Serializable
@@ -35,13 +41,5 @@ data class UserUpdateModel(
     val username: String?,
     val password: String?,
     val email: String?,
-    val phoneNumber: String?,
-    val activated: Boolean?,
-)
-
-@Serializable
-data class UserActivateModel(
-    val username: String,
-    val password: String,
     val phoneNumber: String?,
 )

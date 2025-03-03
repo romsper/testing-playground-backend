@@ -3,6 +3,8 @@ package services.internal
 import utils.ConfigHelper.Companion.appConfig
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import database.OrderEntity
+import database.ProductEntity
 import database.UserEntity
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -22,6 +24,8 @@ class DatabaseHelper {
             SchemaUtils.createMissingTablesAndColumns(
                 tables = arrayOf(
                     UserEntity,
+                    OrderEntity,
+                    ProductEntity,
                 )
             )
             SchemaUtils.checkCycle()

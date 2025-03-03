@@ -2,9 +2,8 @@ package repositories
 
 
 import database.UserEntity
-import database.toFullModel
 import database.toModel
-import models.user.UserActivateModel
+import database.toResponseModel
 import models.user.UserModel
 import models.user.UserRequestModel
 import models.user.UserResponseModel
@@ -24,72 +23,45 @@ import kotlin.let
 
 class UserRepository {
 
-    suspend fun getAllUsers(offset: Long, limit: Int): List<UserResponseModel>? {
+    suspend fun getAllUsers(offset: Long, limit: Int): List<UserModel> {
         return executeQuery {
             UserEntity.selectAll()
                 .limit(limit)
                 .offset(offset)
                 .map { UserEntity.toModel(it) }
-        }
+        } ?: emptyList()
     }
 
-    suspend fun findUserByUUID(uuid: UUID): UserResponseModel? {
-        return executeQuery {
-            UserEntity.selectAll().where { UserEntity.ActivationUUID.eq(uuid) }.firstOrNull()
-                ?.let { UserEntity.toModel(it) }
-        }
-    }
-
-    suspend fun findUserByEmail(email: String): UserResponseModel? {
+    suspend fun findUserByEmail(email: String): UserModel? {
         return executeQuery {
             UserEntity.selectAll().where { UserEntity.Email.eq(email) }.firstOrNull()
                 ?.let { UserEntity.toModel(it) }
         }
     }
 
-    suspend fun findUserByEmailFullModel(email: String): UserModel? {
-        return executeQuery {
-            UserEntity.selectAll().where { UserEntity.Email.eq(email) }.firstOrNull()
-                ?.let { UserEntity.toFullModel(it) }
-        }
-    }
-
-    suspend fun findUserById(id: Int): UserResponseModel? {
+    suspend fun findUserById(id: Int): UserModel? {
         return executeQuery {
             UserEntity.selectAll().where { UserEntity.id.eq(id) }.firstOrNull()
                 ?.let { UserEntity.toModel(it) }
         }
     }
 
-    suspend fun createUser(user: UserRequestModel): UserResponseModel? {
+    suspend fun createUser(user: UserRequestModel): UserModel? {
         return executeQuery {
             UserEntity.insertReturning {
                 it[UserName] = user.username ?: ""
                 it[Password] = ChCrypto.aesEncrypt(user.password ?: "")
                 it[Email] = user.email ?: ""
-                it[ActivationUUID] = UUID.randomUUID()
                 it[CreatedAt] = DateTime.now().millis
             }.map { UserEntity.toModel(it) }.firstOrNull()
         }
     }
 
-    suspend fun activateUser(uuid: UUID, user: UserActivateModel, encryptedPassword: String): UserResponseModel? {
-        return executeQuery {
-            UserEntity.updateReturning(where = { UserEntity.ActivationUUID eq uuid }) {
-                it[UserName] = user.username
-                it[Password] = encryptedPassword
-                it[Activated] = true
-                it[ActivationUUID] = null
-                user.phoneNumber?.let { phoneNumber -> it[PhoneNumber] = phoneNumber }
-            }.map { UserEntity.toModel(it) }.firstOrNull()
-        }
-    }
-
-    suspend fun updateUser(userId: Int, user: UserUpdateModel, encryptedPassword: String?): UserResponseModel? {
+    suspend fun updateUser(userId: Int, user: UserUpdateModel): UserModel? {
         return executeQuery {
             UserEntity.updateReturning(where = { UserEntity.id eq userId }) {
                 user.username?.let { username -> it[UserName] = username }
-                encryptedPassword?.let { password -> it[Password] = password }
+                user.password?.let { password -> it[Password] = ChCrypto.aesEncrypt(password) }
                 user.phoneNumber?.let { phoneNumber -> it[PhoneNumber] = phoneNumber }
                 user.email?.let { email -> it[Email] = email }
             }.map { UserEntity.toModel(it) }.firstOrNull()

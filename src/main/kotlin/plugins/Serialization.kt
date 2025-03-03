@@ -8,12 +8,12 @@ import io.ktor.server.routing.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
-@OptIn(ExperimentalSerializationApi::class)
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         json(Json {
             prettyPrint = true
             explicitNulls = false
+            ignoreUnknownKeys = true
         })
     }
 }

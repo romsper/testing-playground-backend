@@ -2,10 +2,7 @@ package plugins
 
 import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
-import com.exceptions.AuthenticationException
-import com.exceptions.AuthorizationException
-import com.exceptions.InternalErrorException
-import com.exceptions.NotFoundException
+import exceptions.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import utils.badRequest
@@ -43,6 +40,14 @@ fun Application.configureStatusPage() {
 
         exception<IllegalStateException> { call, cause ->
             call.internalServerError(reason = "${cause.message}")
+        }
+
+        exception<BadRequestException> { call, cause ->
+            call.badRequest(reason = "${cause.message}")
+        }
+
+        exception<IllegalArgumentException> { call, cause ->
+            call.badRequest(reason = "${cause.message}")
         }
     }
 }

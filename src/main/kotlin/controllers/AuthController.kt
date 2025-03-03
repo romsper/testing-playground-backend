@@ -21,7 +21,7 @@ fun Route.authRoute(jwtProvider: JWTProvider, userService: UserService) {
 
             when {
                 request.email.isNullOrBlank() || request.password.isNullOrBlank() -> call.badRequest("Email and password cannot be null or blank")
-                else -> when (val user = userService.findUserByEmailFullModel(request.email)) {
+                else -> when (val user = userService.findUserByEmail(request.email)) {
                     null -> call.badRequest("User with email:${request.email} not found")
                     else -> {
                         val decryptedPassword = ChCrypto.aesDecrypt(user.password)
@@ -44,7 +44,7 @@ fun Route.authRoute(jwtProvider: JWTProvider, userService: UserService) {
                         null -> call.badRequest("Refresh token is invalid")
                         else -> {
                             when (val user =
-                                userService.findUserByEmailFullModel(principal.getClaim("email").asString())) {
+                                userService.findUserByEmail(principal.getClaim("email").asString())) {
                                 null -> call.badRequest("User not found")
                                 else -> call.ok(jwtProvider.generateToken(user))
                             }
