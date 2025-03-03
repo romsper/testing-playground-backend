@@ -1,0 +1,695 @@
+openapi: "3.1.0"
+info:
+  title: "qa_backend_playground API"
+  description: "qa_backend_playground API"
+  version: "1.0.0"
+servers:
+  - url: "https://qa_backend_playground"
+paths:
+  /api/v1/auth/login:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequestModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthResponseModel"
+  /api/v1/auth/refresh:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRefreshRequestModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthResponseModel"
+  /api/v1/auth/validate:
+    get:
+      description: ""
+      responses:
+        "401":
+          description: "Unauthorized"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: ""
+  /api/v1/orders:
+    get:
+      description: ""
+      parameters:
+        - name: "offset"
+          in: "query"
+          required: false
+          schema:
+            type: "number"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/OrderModel"
+  /api/v1/orders/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequestModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderModel"
+  /api/v1/orders/user/{id}:
+    get:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/OrderModel"
+  /api/v1/orders/{id}:
+    get:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderModel"
+  /api/v1/orders/{id}/status:
+    put:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderUpdateModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderModel"
+  /api/v1/products:
+    get:
+      description: ""
+      parameters:
+        - name: "offset"
+          in: "query"
+          required: false
+          schema:
+            type: "number"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ProductModel"
+  /api/v1/products/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductRequestModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductModel"
+  /api/v1/products/{id}:
+    get:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductModel"
+    put:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductUpdateModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProductModel"
+    delete:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessResponseModel"
+  /api/v1/users:
+    get:
+      description: ""
+      parameters:
+        - name: "offset"
+          in: "query"
+          required: false
+          schema:
+            type: "number"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/UserModel"
+  /api/v1/users/create:
+    post:
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequestModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserModel"
+  /api/v1/users/me:
+    get:
+      description: ""
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponseModel"
+  /api/v1/users/{id}:
+    get:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponseModel"
+    put:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdateModel"
+        required: true
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserResponseModel"
+    delete:
+      description: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SuccessResponseModel"
+components:
+  schemas:
+    ErrorResponseModel:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          format: "int32"
+        reason:
+          type: "string"
+      required:
+        - "code"
+        - "reason"
+    AuthRequestModel:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+    AuthResponseModel:
+      type: "object"
+      properties:
+        accessToken:
+          type: "string"
+        refreshToken:
+          type: "string"
+        createdAt:
+          type: "integer"
+          format: "int64"
+        expireInMs:
+          type: "integer"
+          format: "int64"
+      required:
+        - "accessToken"
+        - "refreshToken"
+        - "createdAt"
+        - "expireInMs"
+    AuthRefreshRequestModel:
+      type: "object"
+      properties:
+        refreshToken:
+          type: "string"
+      required:
+        - "refreshToken"
+    ProductModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        price:
+          type: "number"
+          format: "double"
+        description:
+          type: "string"
+      required:
+        - "id"
+        - "name"
+        - "price"
+        - "description"
+    OrderModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        userId:
+          type: "integer"
+          format: "int32"
+        orderStatus:
+          type: "string"
+        products:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ProductModel"
+        totalAmount:
+          type: "number"
+          format: "double"
+        createdAt:
+          type: "integer"
+          format: "int64"
+        updatedAt:
+          type: "integer"
+          format: "int64"
+      required:
+        - "id"
+        - "orderStatus"
+        - "products"
+        - "totalAmount"
+        - "createdAt"
+        - "updatedAt"
+    ProductOrderModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+      required:
+        - "id"
+    OrderRequestModel:
+      type: "object"
+      properties:
+        userId:
+          type: "integer"
+          format: "int32"
+        products:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/ProductOrderModel"
+      required:
+        - "products"
+    OrderUpdateModel:
+      type: "object"
+      properties:
+        orderStatus:
+          type: "string"
+      required:
+        - "orderStatus"
+    ProductRequestModel:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        price:
+          type: "number"
+          format: "double"
+        description:
+          type: "string"
+      required:
+        - "name"
+        - "price"
+        - "description"
+    ProductUpdateModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        name:
+          type: "string"
+        price:
+          type: "number"
+          format: "double"
+        description:
+          type: "string"
+    SuccessResponseModel:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          format: "int32"
+        message:
+          type: "string"
+      required:
+        - "code"
+        - "message"
+    UserModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        username:
+          type: "string"
+        password:
+          type: "string"
+        email:
+          type: "string"
+        phoneNumber:
+          type: "string"
+        createdAt:
+          type: "integer"
+          format: "int64"
+      required:
+        - "id"
+        - "username"
+        - "password"
+        - "email"
+        - "phoneNumber"
+        - "createdAt"
+    UserRequestModel:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+        email:
+          type: "string"
+    UserResponseModel:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int32"
+        username:
+          type: "string"
+        email:
+          type: "string"
+        phoneNumber:
+          type: "string"
+        createdAt:
+          type: "integer"
+          format: "int64"
+      required:
+        - "id"
+        - "username"
+        - "email"
+        - "createdAt"
+    UserUpdateModel:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+        email:
+          type: "string"
+        phoneNumber:
+          type: "string"
