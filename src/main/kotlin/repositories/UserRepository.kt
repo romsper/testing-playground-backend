@@ -16,19 +16,18 @@ import org.jetbrains.exposed.sql.updateReturning
 import org.joda.time.DateTime
 import utils.ChCrypto
 import utils.executeQuery
-import java.util.*
 import kotlin.collections.firstOrNull
 import kotlin.collections.map
 import kotlin.let
 
 class UserRepository {
 
-    suspend fun getAllUsers(offset: Long, limit: Int): List<UserModel> {
+    suspend fun getAllUsers(offset: Long, limit: Int): List<UserResponseModel> {
         return executeQuery {
             UserEntity.selectAll()
                 .limit(limit)
                 .offset(offset)
-                .map { UserEntity.toModel(it) }
+                .map { UserEntity.toModel(it).toShortModel() }
         } ?: emptyList()
     }
 

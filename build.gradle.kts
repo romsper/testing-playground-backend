@@ -11,6 +11,7 @@ plugins {
     kotlin("jvm") version "2.1.10"
     kotlin("plugin.serialization") version "2.1.10"
     id("io.ktor.plugin") version "3.1.0"
+    id("com.avast.gradle.docker-compose") version "0.17.12"
 }
 
 group = "com"
@@ -24,6 +25,14 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+tasks.register<Delete>("cleanLog") {
+    delete(file("logs/application.log"))
+}
+
+tasks.named("run") {
+    dependsOn("cleanLog")
 }
 
 dependencies {
@@ -64,4 +73,9 @@ dependencies {
     // Tests
     testImplementation("io.ktor:ktor-server-tests-jvm:3.0.0-beta-1")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+dockerCompose {
+    useComposeFiles.set(listOf("${rootProject.projectDir}/docker-compose.yaml"))
+    isRequiredBy(tasks.named("run"))
 }

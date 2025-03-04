@@ -26,7 +26,7 @@ fun Route.userRoute(userService: UserService) {
                 else -> {
                     when (val user = userService.createUser(request)) {
                         null -> call.badRequest("Something went wrong. Please verify request.")
-                        else -> call.ok(user)
+                        else -> call.ok(user.toShortModel())
                     }
                 }
             }

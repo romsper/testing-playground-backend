@@ -349,7 +349,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/UserModel"
+                  $ref: "#/components/schemas/UserResponseModel"
   /api/v1/users/create:
     post:
       description: ""
@@ -371,7 +371,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/UserModel"
+                $ref: "#/components/schemas/UserResponseModel"
   /api/v1/users/me:
     get:
       description: ""
@@ -629,39 +629,6 @@ components:
       required:
         - "code"
         - "message"
-    UserModel:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-          format: "int32"
-        username:
-          type: "string"
-        password:
-          type: "string"
-        email:
-          type: "string"
-        phoneNumber:
-          type: "string"
-        createdAt:
-          type: "integer"
-          format: "int64"
-      required:
-        - "id"
-        - "username"
-        - "password"
-        - "email"
-        - "phoneNumber"
-        - "createdAt"
-    UserRequestModel:
-      type: "object"
-      properties:
-        username:
-          type: "string"
-        password:
-          type: "string"
-        email:
-          type: "string"
     UserResponseModel:
       type: "object"
       properties:
@@ -682,6 +649,15 @@ components:
         - "username"
         - "email"
         - "createdAt"
+    UserRequestModel:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+        email:
+          type: "string"
     UserUpdateModel:
       type: "object"
       properties:

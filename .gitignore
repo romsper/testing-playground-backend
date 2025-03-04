@@ -3,4 +3,5 @@
 .idea/
 .gradle/
 build/
+logs/
 gradle/gradle-wrapper.jar

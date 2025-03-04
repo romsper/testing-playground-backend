@@ -27,10 +27,6 @@ import services.UserService
 fun main(args: Array<String>) {
     ConfigHelper()
 
-    DatabaseHelper()
-        .connectDatabase()
-        .createDatabase()
-
     embeddedServer(
         factory = Netty,
         port = appConfig.ktor.deployment.port, // This is the port on which Ktor is listening
@@ -40,6 +36,10 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    DatabaseHelper()
+        .connectDatabase()
+        .createDatabase()
+
     val jwtProvider = JWTProvider()
     val userService = UserService(UserRepository())
     val orderService = OrderService(OrderRepository(), ProductRepository())
