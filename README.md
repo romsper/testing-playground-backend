@@ -1,5 +1,8 @@
 # QA API Playground - Backend Service
 
+## Telegram (RU)
+This [romsper | QA Buddy](https://t.me/qa_api_playground) is my personal Telegram channel where I share my experience and knowledge about testing. I will be glad to see you there!
+
 ## Description
 This project is a backend service for managing users, products, and orders. It is built using Kotlin and Ktor, and uses Gradle for build automation.
 Feel free to use this project as a playground to practice your API automation testing skills.
