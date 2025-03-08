@@ -44,10 +44,28 @@ Copy/Paste `openapi.yaml` to [Swagger Editor Online](https://editor.swagger.io/)
 Or you can use the [OpenAPI Specifications](https://plugins.jetbrains.com/plugin/14394-openapi-specifications) plugin to view the API documentation in IntelliJ IDEA.
 
 ## How to Run
-1. Clone the repository.
-2. Navigate to the project directory.
-3. Run `./gradlew run` to run the project.
-4. Run `./gradlew composeDown` to stop Postgres container and DROP database.
+### *nix
+1. Install a fresh instance of `Docker Desktop`.
+2. Download the `JDK 17 Corretto` installer from the Amazon website.
+3. Install/Update `IntelliJ IDEA Community Edition` to the latest version.
+4. Open the `IDEA` project (check in the settings that `Gradle` is using the correct `JDK` version).
+5. IDEA automatically downloads all `dependencies`.
+6. Run the `Terminal` and type `./gradlew run` to run the project.
+7. Run `./gradlew composeDown` to stop the Postgres container and `DROP` the database.
+
+### Windows
+1. Install a fresh instance of `Docker Desktop`.
+2. The Docker installer offered to install WSL and run through it instead of Hyper-V (a pleasant surprise ❤️).
+3. Install/Update `IntelliJ IDEA Community Edition` to the latest version.
+4. Download the `JDK 17 Corretto` installer from the Amazon website.
+5. Verify the system and user `PATH` variables (one was incorrect, so I updated it manually).
+6. Reboot the computer to apply the new `PATH`.
+7. Open the `IDEA` project (check in the settings that `Gradle` is using the correct `JDK` version).
+8. IDEA automatically downloads all `dependencies`.
+9. Open a new type of `Terminal` in IDEA via right-clicking on the terminal tab (see screenshot).
+(This terminal is some kind of illegitimate child of Linux and Windows...)
+10. Enter the command `.\gradlew.bat run`.
+11. Run `.\gradlew.bat composeDown` to stop the `Postgres` container and `DROP` the database.
 
 ## Logs
 Logs are stored in the `logs` directory and cleaned up automatically before each run.
