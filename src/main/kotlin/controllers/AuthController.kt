@@ -20,7 +20,7 @@ fun Route.authRoute(jwtProvider: JWTProvider, userService: UserService) {
             val request = call.receive<AuthRequestModel>()
 
             when {
-                request.email.isNullOrBlank() || request.password.isNullOrBlank() -> call.badRequest("Email and password cannot be null or blank")
+                request.email.isNullOrBlank() || request.password.isNullOrBlank() -> call.badRequest("Email and Password cannot be null or blank")
                 else -> when (val user = userService.findUserByEmail(request.email)) {
                     null -> call.badRequest("User with email:${request.email} not found")
                     else -> {
