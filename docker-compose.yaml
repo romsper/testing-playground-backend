@@ -1,4 +1,11 @@
 services:
+  app:
+    image: romsper/qa-backend-playground:latest
+    ports:
+      - "1111:1111"
+    depends_on:
+      - postgres-db
+
   postgres-db:
     image: postgres:latest
     environment:
