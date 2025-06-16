@@ -2,7 +2,7 @@ services:
   app:
     image: romsper/qa-backend-playground:latest
     environment:
-      - DATABASE_URL=jdbc:postgresql://database:5432/playground
+      DATABASE_URL: jdbc:postgresql://database:5432/playground
     ports:
       - "1111:1111"
     depends_on:
