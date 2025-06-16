@@ -1,12 +1,14 @@
 services:
   app:
     image: romsper/qa-backend-playground:latest
+    environment:
+      - DATABASE_URL=jdbc:postgresql://database:5432/playground
     ports:
       - "1111:1111"
     depends_on:
-      - postgres-db
+      - database
 
-  postgres-db:
+  database:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
@@ -15,7 +17,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  database_data:
