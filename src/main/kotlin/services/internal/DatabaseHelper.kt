@@ -35,7 +35,7 @@ class DatabaseHelper {
 
     private fun hikariDataSource(): HikariDataSource {
         val config = HikariConfig().apply {
-            jdbcUrl = appConfig.database.jdbc
+            jdbcUrl = System.getenv("DATABASE_URL") ?: appConfig.database.jdbc
             schema = appConfig.database.schema
             driverClassName = appConfig.database.driver
             username = appConfig.database.username
