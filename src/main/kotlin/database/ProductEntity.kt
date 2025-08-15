@@ -4,6 +4,7 @@ import models.product.ProductModel
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ResultRow
 
+//TODO Add product category to be able to filter products
 object ProductEntity : IntIdTable("table_products") {
     var Name = varchar("name", 60)
     var Description = varchar("description", 100)

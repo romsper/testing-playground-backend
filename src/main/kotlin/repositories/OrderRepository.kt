@@ -16,7 +16,7 @@ class OrderRepository {
     suspend fun getAllOrders(offset: Long, limit: Int): List<OrderModel> {
         return executeQuery {
             OrderEntity.selectAll()
-                .limit(limit)
+                .limit(limit.coerceAtMost(50))
                 .offset(offset)
                 .map { OrderEntity.toModel(it) }
         } ?: emptyList()

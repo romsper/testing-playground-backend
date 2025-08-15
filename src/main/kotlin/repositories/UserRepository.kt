@@ -25,7 +25,7 @@ class UserRepository {
     suspend fun getAllUsers(offset: Long, limit: Int): List<UserResponseModel> {
         return executeQuery {
             UserEntity.selectAll()
-                .limit(limit)
+                .limit(limit.coerceAtMost(50))
                 .offset(offset)
                 .map { UserEntity.toModel(it).toShortModel() }
         } ?: emptyList()

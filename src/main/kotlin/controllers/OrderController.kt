@@ -18,7 +18,7 @@ fun Route.orderRoute(orderService: OrderService) {
 
             get("/") {
                 val offset = call.request.queryParameters["offset"]?.toLongOrNull() ?: 0
-                val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 10
+                val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
 
                 when (val orders = orderService.getAll(offset, limit)) {
                     emptyList<OrderModel>() -> call.badRequest("Something went wrong. Please verify request.")

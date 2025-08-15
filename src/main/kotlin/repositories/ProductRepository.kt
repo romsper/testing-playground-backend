@@ -17,7 +17,7 @@ class ProductRepository {
     suspend fun getAllProducts(offset: Long, limit: Int): List<ProductModel> {
         return executeQuery {
             ProductEntity.selectAll()
-                .limit(limit)
+                .limit(limit.coerceAtMost(50))
                 .offset(offset)
                 .map { ProductEntity.toModel(it) }
         } ?: emptyList()
