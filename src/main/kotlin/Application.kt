@@ -42,7 +42,7 @@ fun Application.module() {
 
     val jwtProvider = JWTProvider()
     val userService = UserService(UserRepository())
-    val orderService = OrderService(OrderRepository(), ProductRepository())
+    val orderService = OrderService(OrderRepository(), ProductRepository(), UserRepository())
     val productService = ProductService(ProductRepository())
 
     configureStatusPage()

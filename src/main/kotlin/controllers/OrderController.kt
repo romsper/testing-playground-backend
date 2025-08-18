@@ -1,6 +1,7 @@
 package controllers
 
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import models.order.OrderModel
@@ -8,6 +9,7 @@ import models.order.OrderRequestModel
 import models.order.OrderUpdateModel
 import services.OrderService
 import utils.badRequest
+import utils.notFound
 import utils.ok
 
 fun Route.orderRoute(orderService: OrderService) {
@@ -80,6 +82,22 @@ fun Route.orderRoute(orderService: OrderService) {
                 else -> {
                     when (val orders = orderService.findOrderByUserId(userId.toInt())) {
                         emptyList<OrderModel>() -> call.badRequest("Orders for user with id:${userId} not found")
+                        else -> call.ok(orders)
+                    }
+                }
+            }
+        }
+
+        get("/user") {
+            val offset = call.request.queryParameters["offset"]?.toLongOrNull() ?: 0
+            val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
+            val principal = call.principal<JWTPrincipal>()
+            when {
+                principal == null -> call.badRequest("JWT token data is missing or invalid")
+                else -> {
+                    val email = principal.payload.getClaim("email").asString()
+                    when (val orders = orderService.getAllByUserEmail(email, offset, limit)) {
+                        null -> call.notFound("Orders for user with email:${email} not found")
                         else -> call.ok(orders)
                     }
                 }

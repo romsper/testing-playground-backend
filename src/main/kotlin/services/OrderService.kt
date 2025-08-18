@@ -6,10 +6,16 @@ import models.order.OrderRequestModel
 import models.product.ProductModel
 import repositories.OrderRepository
 import repositories.ProductRepository
+import repositories.UserRepository
 
-class OrderService(private val orderRepository: OrderRepository, private val productRepository: ProductRepository) {
+class OrderService(private val orderRepository: OrderRepository, private val productRepository: ProductRepository, private val userRepository: UserRepository) {
 
     suspend fun getAll(offset: Long, limit: Int): List<OrderModel> = orderRepository.getAllOrders(offset, limit)
+
+    suspend fun getAllByUserEmail(email: String, offset: Long, limit: Int): List<OrderModel>? {
+        val user = userRepository.findUserByEmail(email) ?: return null
+        return orderRepository.getAllOrdersByUserId(user.id, offset, limit)
+    }
 
     suspend fun findOrderById(id: Int): OrderModel? = orderRepository.findOrderById(id)
 

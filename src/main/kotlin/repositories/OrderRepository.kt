@@ -22,6 +22,16 @@ class OrderRepository {
         } ?: emptyList()
     }
 
+    suspend fun getAllOrdersByUserId(id: Int, offset: Long, limit: Int): List<OrderModel> {
+        return executeQuery {
+            OrderEntity.selectAll()
+                .where { OrderEntity.UserId.eq(id) }
+                .limit(limit.coerceAtMost(50))
+                .offset(offset)
+                .map { OrderEntity.toModel(it) }
+        } ?: emptyList()
+    }
+
     suspend fun findOrderById(id: Int): OrderModel? {
         return executeQuery {
             OrderEntity.selectAll().where { OrderEntity.id.eq(id) }.firstOrNull()

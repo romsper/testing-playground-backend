@@ -126,6 +126,41 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/OrderModel"
+  /api/v1/orders/user:
+    get:
+      description: ""
+      parameters:
+        - name: "offset"
+          in: "query"
+          required: false
+          schema:
+            type: "number"
+        - name: "limit"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+      responses:
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "404":
+          description: "Not Found"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponseModel"
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/OrderModel"
   /api/v1/orders/user/{id}:
     get:
       description: ""
@@ -488,8 +523,10 @@ components:
       properties:
         email:
           type: "string"
+          nullable: true
         password:
           type: "string"
+          nullable: true
     AuthResponseModel:
       type: "object"
       properties:
@@ -542,6 +579,7 @@ components:
         userId:
           type: "integer"
           format: "int32"
+          nullable: true
         orderStatus:
           type: "string"
         products:
@@ -578,6 +616,7 @@ components:
         userId:
           type: "integer"
           format: "int32"
+          nullable: true
         products:
           type: "array"
           items:
@@ -611,13 +650,17 @@ components:
         id:
           type: "integer"
           format: "int32"
+          nullable: true
         name:
           type: "string"
+          nullable: true
         price:
           type: "number"
           format: "double"
+          nullable: true
         description:
           type: "string"
+          nullable: true
     SuccessResponseModel:
       type: "object"
       properties:
@@ -641,6 +684,7 @@ components:
           type: "string"
         phoneNumber:
           type: "string"
+          nullable: true
         createdAt:
           type: "integer"
           format: "int64"
@@ -654,18 +698,25 @@ components:
       properties:
         username:
           type: "string"
+          nullable: true
         password:
           type: "string"
+          nullable: true
         email:
           type: "string"
+          nullable: true
     UserUpdateModel:
       type: "object"
       properties:
         username:
           type: "string"
+          nullable: true
         password:
           type: "string"
+          nullable: true
         email:
           type: "string"
+          nullable: true
         phoneNumber:
           type: "string"
+          nullable: true

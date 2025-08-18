@@ -61,7 +61,7 @@ fun Route.userRoute(userService: UserService) {
             get("/me") {
                 val principal = call.principal<JWTPrincipal>()
                 when {
-                    principal == null -> call.badRequest("Invalid principal")
+                    principal == null -> call.badRequest("JWT token data is missing or invalid")
                     else -> {
                         val email = principal.payload.getClaim("email").asString()
                         when (val appUser = userService.findUserByEmail(email)) {
