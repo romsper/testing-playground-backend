@@ -3,7 +3,7 @@ package services.internal
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
-import com.models.auth.AuthResponseModel
+import models.auth.AuthResponseModel
 import models.user.UserModel
 import utils.ConfigHelper.Companion.appConfig
 import org.joda.time.DateTime
@@ -20,6 +20,7 @@ class JWTProvider {
         log.info("Generated tokens for user: ${user.email}")
 
         return AuthResponseModel(
+            id = user.id,
             accessToken = accessToken,
             refreshToken = refreshToken,
             createdAt = createdAt,

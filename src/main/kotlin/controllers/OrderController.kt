@@ -28,15 +28,17 @@ fun Route.orderRoute(orderService: OrderService) {
                 }
             }
 
-            get("/{id}") {
-                val orderId = call.parameters["id"]
+            get("/user") {
+                val offset = call.request.queryParameters["offset"]?.toLongOrNull() ?: 0
+                val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
+                val principal = call.principal<JWTPrincipal>()
                 when {
-                    orderId.isNullOrBlank() -> call.badRequest("orderId is incorrect")
-                    orderId.toIntOrNull() == null -> call.badRequest("orderId must be a number")
+                    principal == null -> call.badRequest("JWT token data is missing or invalid")
                     else -> {
-                        when (val order = orderService.findOrderById(orderId.toInt())) {
-                            null -> call.badRequest("Order with id:${orderId} not found")
-                            else -> call.ok(order)
+                        val email = principal.payload.getClaim("email").asString()
+                        when (val orders = orderService.getAllByUserEmail(email, offset, limit)) {
+                            null -> call.notFound("Orders for user with email:${email} not found")
+                            else -> call.ok(orders)
                         }
                     }
                 }
@@ -74,6 +76,20 @@ fun Route.orderRoute(orderService: OrderService) {
             }
         }
 
+        get("/{id}") {
+            val orderId = call.parameters["id"]
+            when {
+                orderId.isNullOrBlank() -> call.badRequest("orderId is incorrect")
+                orderId.toIntOrNull() == null -> call.badRequest("orderId must be a number")
+                else -> {
+                    when (val order = orderService.findOrderById(orderId.toInt())) {
+                        null -> call.badRequest("Order with id:${orderId} not found")
+                        else -> call.ok(order)
+                    }
+                }
+            }
+        }
+
         get("/user/{id}") {
             val userId = call.parameters["id"]
             when {
@@ -82,22 +98,6 @@ fun Route.orderRoute(orderService: OrderService) {
                 else -> {
                     when (val orders = orderService.findOrderByUserId(userId.toInt())) {
                         emptyList<OrderModel>() -> call.badRequest("Orders for user with id:${userId} not found")
-                        else -> call.ok(orders)
-                    }
-                }
-            }
-        }
-
-        get("/user") {
-            val offset = call.request.queryParameters["offset"]?.toLongOrNull() ?: 0
-            val limit = call.request.queryParameters["limit"]?.toIntOrNull() ?: 50
-            val principal = call.principal<JWTPrincipal>()
-            when {
-                principal == null -> call.badRequest("JWT token data is missing or invalid")
-                else -> {
-                    val email = principal.payload.getClaim("email").asString()
-                    when (val orders = orderService.getAllByUserEmail(email, offset, limit)) {
-                        null -> call.notFound("Orders for user with email:${email} not found")
                         else -> call.ok(orders)
                     }
                 }

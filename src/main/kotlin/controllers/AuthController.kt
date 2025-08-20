@@ -1,7 +1,7 @@
 package controllers
 
-import com.models.auth.AuthRefreshRequestModel
-import com.models.auth.AuthRequestModel
+import models.auth.AuthRefreshRequestModel
+import models.auth.AuthRequestModel
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*

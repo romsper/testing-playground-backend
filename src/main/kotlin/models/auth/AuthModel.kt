@@ -1,4 +1,4 @@
-package com.models.auth
+package models.auth
 
 import kotlinx.serialization.Serializable
 
@@ -10,6 +10,7 @@ data class AuthRequestModel(
 
 @Serializable
 data class AuthResponseModel(
+    val id: Int,
     val accessToken: String,
     val refreshToken: String,
     val createdAt: Long,
