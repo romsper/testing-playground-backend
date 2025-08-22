@@ -3,7 +3,7 @@
 ## Description
 This project is a backend service for managing users, products, and orders. It is built using Kotlin and Ktor, and uses Gradle for build automation.
 Feel free to use this project as a playground to practice your API automation testing skills.
-Moreover, you can change the code and add new features to the project if you want to practice your Kotlin skills or just to have fun.
+Moreover, you can connect this project with the [testing-playground-frontend](https://github.com/romsper/testing-playground-frontend) project to create a full-stack application for testing purposes.
 
 ## Technologies Used
 - Kotlin
