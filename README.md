@@ -73,7 +73,7 @@ The application configuration is located in the `src/main/resources/application.
 Logs are written to the `logs` directory in the root of the project. You can change the logging configuration in the `src/main/resources/logback.xml` file.
 
 ## Telegram (RU)
-This [romsper | QA Buddy](https://t.me/qa_api_playground) is my personal Telegram channel where I share my experience and knowledge about testing. I will be glad to see you there!
+This [romsper | QA Buddy](https://t.me/romsper_qa_buddy) is my personal Telegram channel where I share my experience and knowledge about testing. I will be glad to see you there!
 
 ## License
 This project is licensed under the MIT License.

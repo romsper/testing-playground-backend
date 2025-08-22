@@ -1,6 +1,6 @@
 services:
   app:
-    image: romsper/qa-backend-playground:latest
+    image: romsper/testing-playground-backend:latest
     environment:
       DATABASE_URL: jdbc:postgresql://database:5432/playground
     ports:

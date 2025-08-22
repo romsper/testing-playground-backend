@@ -1,10 +1,10 @@
 openapi: "3.1.0"
 info:
-  title: "qa_backend_playground API"
-  description: "qa_backend_playground API"
+  title: "testing_playground_backend"
+  description: "testing_playground_backend"
   version: "1.0.0"
 servers:
-  - url: "https://qa_backend_playground"
+  - url: "https://localhost:1111"
 paths:
   /api/v1/auth/login:
     post:
@@ -530,6 +530,9 @@ components:
     AuthResponseModel:
       type: "object"
       properties:
+        id:
+          type: "integer"
+          format: "int32"
         accessToken:
           type: "string"
         refreshToken:
@@ -541,6 +544,7 @@ components:
           type: "integer"
           format: "int64"
       required:
+        - "id"
         - "accessToken"
         - "refreshToken"
         - "createdAt"
