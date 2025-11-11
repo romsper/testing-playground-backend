@@ -65,7 +65,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql:$flyway_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-json:$exposed_version")
-    runtimeOnly("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
 
     // Utils
     implementation("joda-time:joda-time:$joda_time")

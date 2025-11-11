@@ -9,39 +9,41 @@ class ConfigHelper {
     companion object {
         private val config = HoconApplicationConfig(ConfigFactory.load())
 
-        val appConfig = AppConfigModel(
-            ktor = KtorConfig(
-                deployment = DeploymentConfig(
-                    host = config.tryGetString("ktor.deployment.host") ?: "localhost",
-                    port = config.tryGetString("ktor.deployment.port")?.toInt() ?: 1111,
+        val appConfig: AppConfigModel by lazy {
+            AppConfigModel(
+                ktor = KtorConfig(
+                    deployment = DeploymentConfig(
+                        host = config.tryGetString("ktor.deployment.host") ?: "localhost",
+                        port = config.tryGetString("ktor.deployment.port")?.toInt() ?: 1111,
+                    ),
+                    application = ApplicationConfig(
+                        modules = config.tryGetStringList("ktor.application.modules") ?: emptyList(),
+                    ),
                 ),
-                application = ApplicationConfig(
-                    modules = config.tryGetStringList("ktor.application.modules") ?: emptyList(),
+                database = DbConfig(
+                    username = config.tryGetString("database.username") ?: "",
+                    password = config.tryGetString("database.password") ?: "",
+                    jdbc = config.tryGetString("database.jdbc") ?: "",
+                    schema = config.tryGetString("database.schema") ?: "public",
+                    driver = config.tryGetString("database.driver") ?: "",
                 ),
-            ),
-            database = DbConfig(
-                username = config.tryGetString("database.username") ?: "",
-                password = config.tryGetString("database.password") ?: "",
-                jdbc = config.tryGetString("database.jdbc") ?: "",
-                schema = config.tryGetString("database.schema") ?: "public",
-                driver = config.tryGetString("database.driver") ?: "",
-            ),
-            jwt = JwtConfig(
-                secret = config.tryGetString("jwt.secret") ?: "",
-                domain = config.tryGetString("jwt.domain") ?: "",
-                audience = config.tryGetString("jwt.audience") ?: "",
-                realm = config.tryGetString("jwt.realm") ?: "",
-                subject = config.tryGetString("jwt.subject") ?: "",
-                accessExpireInDays = config.tryGetString("jwt.accessExpireInDays")?.toInt() ?: 1,
-                refreshExpireInDays = config.tryGetString("jwt.refreshExpireInDays")?.toInt() ?: 7,
-            ),
-            email = EmailConfig(
-                username = config.tryGetString("email.username") ?: "",
-                password = config.tryGetString("email.password") ?: "",
-                smtp = config.tryGetString("email.smtp") ?: "",
-                port = config.tryGetString("email.port")?.toInt() ?: 587,
-            ),
-        )
+                jwt = JwtConfig(
+                    secret = config.tryGetString("jwt.secret") ?: "",
+                    domain = config.tryGetString("jwt.domain") ?: "",
+                    audience = config.tryGetString("jwt.audience") ?: "",
+                    realm = config.tryGetString("jwt.realm") ?: "",
+                    subject = config.tryGetString("jwt.subject") ?: "",
+                    accessExpireInDays = config.tryGetString("jwt.accessExpireInDays")?.toInt() ?: 1,
+                    refreshExpireInDays = config.tryGetString("jwt.refreshExpireInDays")?.toInt() ?: 7,
+                ),
+                email = EmailConfig(
+                    username = config.tryGetString("email.username") ?: "",
+                    password = config.tryGetString("email.password") ?: "",
+                    smtp = config.tryGetString("email.smtp") ?: "",
+                    port = config.tryGetString("email.port")?.toInt() ?: 587,
+                ),
+            )
+        }
     }
 }
 
