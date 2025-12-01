@@ -1,4 +1,5 @@
 # API Playground - Backend Service for Testing purposes
+[![](https://img.shields.io/badge/-LinkedIn-blue?style=flat&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/romsper/) [![](https://img.shields.io/static/v1?label=Telegram&message=%23&logo=Telegram&color=%23fe8e86)](http://t.me/romsper_qa_buddy) ![](https://komarev.com/ghpvc/?username=romsper) 
 
 ## Description
 This project is a backend service for managing users, products, and orders. It is built using Kotlin and Ktor, and uses Gradle for build automation.
