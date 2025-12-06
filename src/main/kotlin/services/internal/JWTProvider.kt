@@ -2,21 +2,23 @@ package services.internal
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.DecodedJWT
 import models.auth.AuthResponseModel
 import models.user.UserModel
-import utils.ConfigHelper.Companion.appConfig
 import org.joda.time.DateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import utils.ConfigHelper.Companion.appConfig
+import java.util.UUID
 
 class JWTProvider {
     private val log: Logger = LoggerFactory.getLogger(JWTProvider::class.java)
 
     fun generateToken(user: UserModel): AuthResponseModel {
         val createdAt = DateTime.now().millis
-        val accessToken = createToken(user, appConfig.jwt.accessExpireInDays)
-        val refreshToken = createToken(user, appConfig.jwt.refreshExpireInDays)
+        val accessToken = createAccessToken(user)
+        val refreshToken = createRefreshToken(user)
         log.info("Generated tokens for user: ${user.email}")
 
         return AuthResponseModel(
@@ -29,19 +31,60 @@ class JWTProvider {
     }
 
     fun verifyToken(token: String): DecodedJWT? {
-        log.info("Verifying token")
-        return JWT.require(Algorithm.HMAC512(appConfig.jwt.secret)).build().verify(token)
+        log.info("Verifying access token")
+        return try {
+            JWT.require(Algorithm.HMAC512(appConfig.jwt.secret))
+                .withAudience(appConfig.jwt.audience)
+                .withIssuer(appConfig.jwt.domain)
+                .withSubject(appConfig.jwt.subject)
+                .withClaim("type", "access")
+                .build()
+                .verify(token)
+        } catch (ex: JWTVerificationException) {
+            log.warn("Access token verification failed", ex)
+            null
+        }
     }
 
-    private fun createToken(user: UserModel, expireInDays: Int): String {
-        log.info("Creating token for user: ${user.email}")
+    fun verifyRefreshToken(refreshToken: String): DecodedJWT? {
+        log.info("Verifying refresh token")
+        return try {
+            JWT.require(Algorithm.HMAC512(appConfig.jwt.secret))
+                .withAudience(appConfig.jwt.audience)
+                .withIssuer(appConfig.jwt.domain)
+                .withSubject(appConfig.jwt.subject)
+                .withClaim("type", "refresh")
+                .build()
+                .verify(refreshToken)
+        } catch (ex: JWTVerificationException) {
+            log.warn("Refresh token verification failed", ex)
+            null
+        }
+    }
+
+    private fun createAccessToken(user: UserModel): String {
         return JWT.create()
             .withAudience(appConfig.jwt.audience)
             .withIssuer(appConfig.jwt.domain)
-            .withExpiresAt(DateTime(DateTime.now()).plusDays(expireInDays).toDate())
             .withSubject(appConfig.jwt.subject)
+            .withExpiresAt(DateTime.now().plusDays(appConfig.jwt.accessExpireInDays).toDate())
+            .withClaim("type", "access")
             .withClaim("email", user.email)
             .withClaim("name", user.username)
+            .withClaim("jti", UUID.randomUUID().toString())
+            .sign(Algorithm.HMAC512(appConfig.jwt.secret))
+    }
+
+    private fun createRefreshToken(user: UserModel): String {
+        return JWT.create()
+            .withAudience(appConfig.jwt.audience)
+            .withIssuer(appConfig.jwt.domain)
+            .withSubject(appConfig.jwt.subject)
+            .withExpiresAt(DateTime.now().plusDays(appConfig.jwt.refreshExpireInDays).toDate())
+            .withClaim("type", "refresh")
+            .withClaim("email", user.email)
+            .withClaim("name", user.username)
+            .withClaim("jti", UUID.randomUUID().toString())
             .sign(Algorithm.HMAC512(appConfig.jwt.secret))
     }
 }

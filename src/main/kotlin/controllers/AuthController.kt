@@ -20,9 +20,9 @@ fun Route.authRoute(jwtProvider: JWTProvider, userService: UserService) {
             val request = call.receive<AuthRequestModel>()
 
             when {
-                request.email.isNullOrBlank() || request.password.isNullOrBlank() -> call.badRequest("Email and Password cannot be null or blank")
+                request.email.isNullOrBlank() || request.password.isNullOrBlank() -> call.badRequest("Invalid email or password")
                 else -> when (val user = userService.findUserByEmail(request.email)) {
-                    null -> call.badRequest("User with email:${request.email} not found")
+                    null -> call.badRequest("Invalid email or password")
                     else -> {
                         val decryptedPassword = ChCrypto.aesDecrypt(user.password)
                         when (decryptedPassword != request.password) {
@@ -38,13 +38,13 @@ fun Route.authRoute(jwtProvider: JWTProvider, userService: UserService) {
             val request = call.receive<AuthRefreshRequestModel>()
 
             when {
-                request.refreshToken.isBlank() -> call.badRequest("Refresh token cannot be null or blank")
+                request.refreshToken.isNullOrBlank() -> call.badRequest("Invalid refresh token")
                 else -> {
-                    when (val principal = jwtProvider.verifyToken(request.refreshToken)) {
-                        null -> call.badRequest("Refresh token is invalid")
+                    when (val principal = jwtProvider.verifyRefreshToken(request.refreshToken)) {
+                        null -> call.badRequest("Invalid refresh token")
                         else -> {
-                            when (val user =
-                                userService.findUserByEmail(principal.getClaim("email").asString())) {
+                            val email = principal.getClaim("email").asString()
+                            when (val user = userService.findUserByEmail(email)) {
                                 null -> call.badRequest("User not found")
                                 else -> call.ok(jwtProvider.generateToken(user))
                             }
