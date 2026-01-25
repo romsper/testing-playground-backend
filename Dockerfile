@@ -1,9 +1,10 @@
-FROM amazoncorretto:17.0.15-al2023
-
+FROM gradle:8-jdk17 AS builder
 WORKDIR /app
+COPY . .
+RUN gradle build --no-daemon -x test
 
-COPY build/libs/testing-playground-backend-all.jar app.jar
-
+FROM amazoncorretto:17.0.15-al2023
+WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 EXPOSE 1111
-
 ENTRYPOINT ["java", "-jar", "app.jar"]

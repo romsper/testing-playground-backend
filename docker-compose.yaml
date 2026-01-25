@@ -1,12 +1,14 @@
 services:
   app:
-    image: romsper/testing-playground-backend:latest
+    build:
+      context: .
     environment:
       DATABASE_URL: jdbc:postgresql://database:5432/playground
     ports:
       - "1111:1111"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   database:
     image: postgres:latest
@@ -17,7 +19,12 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - database_data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   database_data:
