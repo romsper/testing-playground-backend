@@ -4,6 +4,7 @@ services:
       context: .
     environment:
       DATABASE_URL: jdbc:postgresql://database:5432/playground
+      PRESET: "true"
     ports:
       - "1111:1111"
     depends_on:

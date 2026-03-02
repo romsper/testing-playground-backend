@@ -1,3 +1,4 @@
+import com.sun.tools.javac.tree.TreeInfo.args
 import services.internal.JWTProvider
 import services.internal.DatabaseHelper
 import controllers.authRoute
@@ -29,14 +30,15 @@ fun main(args: Array<String>) {
 
     embeddedServer(
         factory = Netty,
-        port = appConfig.ktor.deployment.port, // This is the port on which Ktor is listening
+        port = appConfig.ktor.deployment.port,
         host = appConfig.ktor.deployment.host,
         module = Application::module,
     ).start(wait = true)
 }
 
 fun Application.module() {
-    DatabaseHelper()
+    val preset = System.getenv("PRESET")?.toBoolean() ?: false
+    DatabaseHelper(preset)
         .connectDatabase()
         .createDatabase()
 
